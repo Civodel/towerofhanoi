@@ -121,12 +121,13 @@ useEffect(() => {
       <div className="board-display">
         <div className="towers">
         {Object.keys(towers).map((tower, index) => (
-        <div key={index} className="tower">
-          {towers[tower].map((disk, idx) => (
-            <div key={idx} className={`disk disk${disk}`} style={{ width: `${20 + disk * 10}px`, backgroundColor: `rgb(${disk * 20}, ${disk * 30}, ${disk * 10})` }}>{disk}</div>
-          ))}
-        </div>
-      ))}
+  <div key={index} className="tower">
+    {/* Ordena los discos y luego los invierte */}
+    {towers[tower].slice().sort((a, b) => b - a).reverse().map((disk, idx) => (
+      <div key={idx} className={`disk disk${disk}`} style={{ width: `${20 + disk * 10}px`, backgroundColor: `rgb(${disk * 20}, ${disk * 30}, ${disk * 10})` }}>{disk}</div>
+    ))}
+  </div>
+))}
         </div>
         
         <HanoiRules />

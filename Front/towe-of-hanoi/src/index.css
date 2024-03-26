@@ -139,12 +139,12 @@ button:focus-visible {
 }
 
 .tower {
-  width: 10rem;
+  width: 11rem;
   height: 15rem;
   border: 1px solid black;
-  display: inline-block;
-  vertical-align: bottom;
+  display: block;
   align-items: flex-end;
+  align-content: flex-end;
   padding: 10px;
 }
 
