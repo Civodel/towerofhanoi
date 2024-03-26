@@ -1,6 +1,7 @@
 from typing import Union
 
 from fastapi import FastAPI
+from starlette.responses import RedirectResponse
 
 from routes import towers, solution
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,7 +20,12 @@ app.add_middleware(
 
 app.include_router(towers.route)
 app.include_router(solution.route)
+
+
 @app.get("/")
+def root():
+    return RedirectResponse(url="/docs/")
+@app.get("/a")
 async def read_root():
     return {"Hello": "World"}
 

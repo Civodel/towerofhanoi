@@ -17,13 +17,22 @@ def hanoi_tower_solution(num_discs, source,target,auxiliary):
 def hanoi_tower_body(moves: list, towers) -> list:
     responses = []
 
-    print(towers)
-    print(moves)
+    towers['a'].reverse()
 
     for move in moves:
         from_tower, to_tower = move
         disk = towers[from_tower].pop()
         towers[to_tower].append(disk)
         responses.append(copy.deepcopy(towers))
-
+    print(responses)
     return responses
+
+
+def hanoi_movements( moves: list):
+    mv = []
+    for move in moves:
+        from_tower, to_tower = move
+        movement = f"Take Disk from tower {from_tower} to tower {to_tower}"
+        mv.append(movement)
+
+    return mv
