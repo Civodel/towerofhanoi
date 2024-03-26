@@ -1,146 +1,100 @@
 
-
-import React, { useState,useEffect } from 'react';
-import { TowerDisplay } from './components/TowerDisplay';
+import React, { useState, useEffect } from 'react';
 import { HeaderInfo } from './components/HeaderInfo'; 
-import { PuzzleSolve } from './components/SolvePuzzle';
 import { HanoiRules } from './components/HanoiRules';
-import { TRY_BOARD, DEFAULT_BOARD, BOARD_4, SOLVE_BOARD,BODY_POST } from './constants/constants';
+import { TowerDisplay } from './components/TowerDisplay';
+import { DEFAULT_BOARD,DISKS_IN_TOWER } from './constants/constants';
 import api from '../backend/backend';
 
-
 function SelectDiscs({ onChange }) {
+  {/*Colocar estilos en el boton similar al select*/}
   return (
-    <select name="select" onChange={onChange} id='select-element'>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
+    <div className='solve-select'>
+      <h4>Numero de Discos</h4>
+      
+          <select className='classic' name="select" onChange={onChange} id='select-element'>
+      {DISKS_IN_TOWER.map(value => (
+        <option key={value} value={value}>{value}</option>
+      ))}
     </select>
+    </div>
   );
 }
 
-
 function App() {
-
-const [towers, setTower] = useState(DEFAULT_BOARD)
-const [moves,setMove]=useState('Move disk 1 de A to B')
-const [click, setClick]=useState(1)
-const [selectValue, setSelectedValue] =useState(3)
-
-const handleClick = async () => {
-  try {
-    const solutionData = await api.post('/solution/'+selectValue,towers);
-    console.log(solutionData.data);
-
-    const promises = solutionData.data.map((tower, index) => {
-      
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          setTower(tower); 
-          resolve(); 
-        }, index * 2000); 
-      });
-    });
-
-    
-    await Promise.all(promises);
-
-  } catch (error) {
-    console.error('Error respuestas: ', error);
-  }
-};
-
-const handleSelectChange = (e) => {
-
-
-  const selectedValue = e.target.value;
-
-  const fetchTowers = async (selectedValue) => {
-
-    try {
-      
-      const towersData = await api.get('/towers/create/'+selectedValue);
-      setTower(towersData.data)
-    } catch (error) {
-      console.error('Error culiao: ', error);
-    }
-  };
-  console.log("llamao")
-
-  setSelectedValue(selectedValue)
-  fetchTowers(selectedValue);
+  const [towers, setTowers] = useState(DEFAULT_BOARD);
+  const [selectValue, setSelectValue] = useState(3);
+  const [moves, setMoves] =useState()
   
-};
 
-useEffect(() => {
-  const fetchTowers = async () => {
+  useEffect(() => {
+    fetchTowers(selectValue);
+  }, [selectValue]);
 
+  const fetchTowers = async (value) => {
     try {
-      
-      const towersData = await api.get('/towers/create/');
-      console.log(towersData.data)
-      console.log(DEFAULT_BOARD)
-      setTower(towersData.data)
+      const towersData = await api.get(`/towers/create/${value}`);
+      setTowers(towersData.data);
     } catch (error) {
-      console.error('Error culiao: ', error);
+      console.error('Error fetching towers: ', error);
     }
   };
-},[SelectDiscs]);
 
-
-useEffect(() => {
-  const fetchSolution = async () => {
-
+  const handleClick = async () => {
     try {
-      
-      const solutionData = await api.get('/solution/3');
-      console.log(solutionData.data)
-      
+      const movementData =await api.get(`/solution/moves/${selectValue}`)
+      console.log(movementData.data)
+
+      const movePromises =movementData.data.map((movement,index) =>{
+        return new Promise((resolve)=>{
+          setTimeout(()=>{
+            setMoves(movement);
+            resolve();
+          },index *2000)
+        });
+      });
+
+
+      const solutionData = await api.post(`/solution/${selectValue}`, towers);
+      console.log(solutionData.data);
+
+      solutionData.data.forEach((tower, index) => {
+        setTimeout(() => {
+          setTowers(tower);
+        }, index * 2000);
+      });
     } catch (error) {
-      console.error('Error culiao: ', error);
+      console.error('Error fetching solution: ', error);
     }
   };
-},[handleClick]);
-
 
   return (
-    
     <main className="main">
-      <HeaderInfo/>
+      <HeaderInfo />
       <h1>Torres de Hanoi</h1>
-      
+      <HanoiRules />
       <div className="solve-section">
-
-      <button  onClick={handleClick} >Resolver</button>
-      <SelectDiscs onChange={handleSelectChange} />
-
+   
+        <SelectDiscs onChange={(e) => setSelectValue(parseInt(e.target.value))} />
+        <button className='resolve-button' onClick={handleClick}>Resolver</button>
       </div>
+      
       <div className="board-display">
         <div className="towers">
         {Object.keys(towers).map((tower, index) => (
   <div key={index} className="tower">
-    {/* Ordena los discos y luego los invierte */}
     {towers[tower].slice().sort((a, b) => b - a).reverse().map((disk, idx) => (
-      <div key={idx} className={`disk disk${disk}`} style={{ width: `${20 + disk * 10}px`, backgroundColor: `rgb(${disk * 20}, ${disk * 30}, ${disk * 10})` }}>{disk}</div>
+      <div key={idx} className={`disk disk${disk}`} style={{ width: `${20 + disk * 10}px`, backgroundColor: `rgb(${disk * 10}, ${disk * 20}, ${disk * 60})` }}>{disk}</div>
     ))}
   </div>
 ))}
         </div>
-        
-        <HanoiRules />
+       
       </div>
-      <div>movimientos {moves}</div>
-    
-
+      
+      <div>Moves:  {moves}  </div>
     </main>
   );
 }
 
-export default App;
-
-
-
-
+export default App; 
