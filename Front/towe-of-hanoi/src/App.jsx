@@ -5,7 +5,7 @@ import { TowerDisplay } from './components/TowerDisplay';
 import { HeaderInfo } from './components/HeaderInfo'; 
 import { PuzzleSolve } from './components/SolvePuzzle';
 import { HanoiRules } from './components/HanoiRules';
-import { TRY_BOARD, DEFAULT_BOARD, BOARD_4, SOLVE_BOARD } from './constants/constants';
+import { TRY_BOARD, DEFAULT_BOARD, BOARD_4, SOLVE_BOARD,BODY_POST } from './constants/constants';
 import api from '../backend/backend';
 
 
@@ -28,41 +28,30 @@ function App() {
 const [towers, setTower] = useState(DEFAULT_BOARD)
 const [moves,setMove]=useState('Move disk 1 de A to B')
 const [click, setClick]=useState(1)
+const [selectValue, setSelectedValue] =useState(3)
 
-const handleClick =() =>{
-  
-  const fetchSolution = async () => {
+const handleClick = async () => {
+  try {
+    const solutionData = await api.post('/solution/'+selectValue,towers);
+    console.log(solutionData.data);
 
-    try {
+    const promises = solutionData.data.map((tower, index) => {
       
-      const solutionData = await api.get('/solution/3');
-      console.log(solutionData.data)
-      
-      
-      
-        for (let i = 0; i < 7; i++) {
-          setTimeout(() => { setTower(solutionData.data[i]); }, 2000)
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          setTower(tower); 
+          resolve(); 
+        }, index * 2000); 
+      });
+    });
+
     
-          }
-        
-        
-    
-      
-      
-      
-       
-    } catch (error) {
-      console.error('Error respuestas: ', error);
-    }
-  };
-  
-    fetchSolution();
- 
+    await Promise.all(promises);
 
-
-
-
-}
+  } catch (error) {
+    console.error('Error respuestas: ', error);
+  }
+};
 
 const handleSelectChange = (e) => {
 
@@ -81,7 +70,7 @@ const handleSelectChange = (e) => {
   };
   console.log("llamao")
 
-  
+  setSelectedValue(selectedValue)
   fetchTowers(selectedValue);
   
 };
@@ -115,14 +104,6 @@ useEffect(() => {
     }
   };
 },[handleClick]);
-
-
-
-
-
-
-
-
 
 
   return (

@@ -20,3 +20,11 @@ export const  DEFAULT_BOARD ={
     b: [],
     c: [1,2,3,4,5]
   }
+
+
+  export const BODY_POST ={
+    a: [3,2,1],
+    b: [],
+    c: []
+  }
+  
