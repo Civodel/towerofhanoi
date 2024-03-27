@@ -29,3 +29,5 @@ export const  DEFAULT_BOARD ={
   }
   
   export const DISKS_IN_TOWER=[3, 4, 5, 6, 7, 8,9,10,11,12]
+
+

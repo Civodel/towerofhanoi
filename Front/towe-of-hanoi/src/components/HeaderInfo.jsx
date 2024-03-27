@@ -1,10 +1,11 @@
 export function HeaderInfo () {
     return (
-      <header>
-        <h3>Christian Ivan Alanis Barrera   .</h3>
-        <br />
-        <h4>  Solution proposal: Hanoi Towers</h4>
-      </header>
+<div className="presentation-header">
+
+        <h2> Solution proposal: Hanoi Towers</h2>
+        <h2>Christian Ivan Alanis Barrera</h2>
+
+</div>
       
     )
   }
