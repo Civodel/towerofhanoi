@@ -9,6 +9,9 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 origins = ["*"]
 
+app.include_router(towers.route)
+app.include_router(solution.route)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -18,19 +21,8 @@ app.add_middleware(
 )
 
 
-app.include_router(towers.route)
-app.include_router(solution.route)
-
-
-
 @app.get("/")
-async def read_root():
-    return {"Hello": "World"}
+async def redirect_docs():
+    return RedirectResponse("/docs/")
 
 
-@app.get("/items/{item_id}")
-async def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
-
-
-#uvicorn main:app  --reload --host 0.0.0.0 --port 8000

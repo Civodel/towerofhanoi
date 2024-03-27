@@ -3,3 +3,5 @@ DEFAULT_BOARD = {
     'b': [],
     'c': []
   }
+MOVE_INDEX='a'
+
