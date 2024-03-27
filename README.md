@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="" rel="noopener">
- <img width=200px height=200px src="https://i.imgur.com/6wj0hh6.jpg" alt="Project logo"></a>
+  <a href="" rel="https://alanis-dev.netlify.app/">
+ <img width=200px height=200px src="https://cdn-icons-png.freepik.com/512/1746/1746603.png" alt="Project logo"></a>
 </p>
 
 <h3 align="center">Tower Of Hanoi</h3>
@@ -15,7 +15,6 @@ This is my proposed solution to the Towers of Hanoi mathematical problem. On the
 
 ## 📝 Table of Contents
 
-[![Tower](https://img.shields.io/badge/license-MIT-blue.svg)]
 - [About](#about)
 - [Getting Started](#getting_started)
 - [Deployment](#deployment)
