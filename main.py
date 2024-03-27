@@ -22,10 +22,8 @@ app.include_router(towers.route)
 app.include_router(solution.route)
 
 
+
 @app.get("/")
-def root():
-    return RedirectResponse(url="/docs/")
-@app.get("/a")
 async def read_root():
     return {"Hello": "World"}
 
